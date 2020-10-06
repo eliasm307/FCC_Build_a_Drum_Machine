@@ -19,6 +19,7 @@
   text-align: center;
 }
 
+ 
 #drum-machine,
 #main-container,
 #controls-container,
@@ -32,12 +33,17 @@
   border-color: red;
 }
 
+
+
 #drum-machine {
   position: relative;
   width: 100vw;
   height: 100vh;
-  padding: 100px;
+  //padding: 100px;
 
+  h2 {
+    font-size: 1.25em;
+  }
 
   #main-container {
      
@@ -59,17 +65,26 @@
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5);
 
     //internal content
-    padding: 20px;
+    //padding: 20px;
  
     #controls-container {  
-      padding: 0px 30px;
+      padding: 0px 20px;
       height: 100%;
       -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
       -moz-box-sizing: border-box;    /* Firefox, other Gecko */
       box-sizing: border-box; 
 
+      hr {
+        width: 100%;
+        display: block; 
+      }
+
       #range-volume {
-        display: inline;
+        //display: inline;
+      }
+
+      #display {
+
       }
     }
 
@@ -83,12 +98,46 @@
 
       .drum-pad {
         margin: 0px;
-        padding: 5px; 
+        //padding: 5px; 
+        max-width: 15vw;
 
         button {
           height: 100%;
           margin: 0px;
         }
+
+        button:before {
+          content: attr(sound-id); /* show href of a tag in tooltip */
+          position:absolute;
+          
+          /* vertically center */
+          bottom:100%;
+          transform:translateY(-50%);
+           
+          /* move to center horizontally */
+          left:50%;
+          transform:translateX(-50%);
+  
+          /* basic styles */
+          min-width:100px;  
+          padding:10px;
+          border-radius:5px;
+          background:rgba(0,0,0,0.5);
+          color: white;
+          text-align:center;
+        
+          //allow links to be wrapped at any point
+          word-wrap: none;
+
+          z-index: 100;
+  
+          display:none; /* hide by default */
+        }
+  
+        //display link tooltip on hover
+        button:hover:before {
+          display:block;
+        } 
       }
     }
  
