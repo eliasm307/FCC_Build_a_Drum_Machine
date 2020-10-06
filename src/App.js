@@ -7,6 +7,7 @@ import "./styles.scss";
 To-do
 - Add history section
 -   Record pad clicks
+-   Add ability to play back history at a vairable speed
 
 - Fix power button
 - Fix volume slider
@@ -183,7 +184,7 @@ class Wrapper extends React.Component {
   handleBankSelect(e) {
     console.log("Bank selected value: ", e.target.value);
     this.setState({ 
-      displayMessage: "Selected bank: " + e.target.value,
+      displayMessage: "Selected sound bank: " + e.target.value,
       currentBank: banks.filter(el => el.name === e.target.value)[0]
       
     });
@@ -269,14 +270,12 @@ class Wrapper extends React.Component {
 
 const ControlsContainer = (props) => {
   return (
-    <div id="controls-container" className="col m-3">
-      
-      <div className="row">
+    <div id="controls-container" className="col mr-3 my-3">
+       
         <h2>Controls</h2>
-        <hr/>
-      </div>
+        <hr/> 
 
-      <div className="row"> 
+      <div className=""> 
         <div className="col custom-control custom-switch">
           <input 
             id="power-switch"
@@ -290,7 +289,7 @@ const ControlsContainer = (props) => {
             className="custom-control-label" 
             htmlFor="power-switch"
           >
-              Power
+              {props.appState.powerOn ? "Power On" : "Power Off"}
           </label>
         </div> 
  
@@ -298,8 +297,8 @@ const ControlsContainer = (props) => {
 
       <br/>
 
-      <div className="row">
-          <label className="mr-sm-2" for="inlineFormCustomSelect">Sound Bank</label>
+      <div className="">
+          <label className="mr-sm-2" for="inlineFormCustomSelect">Select Sound Bank</label>
           
           <select 
             className="custom-select"
@@ -312,10 +311,10 @@ const ControlsContainer = (props) => {
 
         <br/>
 
-      <div className="row">
+      <div className="">
 
         <label htmlFor="range-volume">
-            Volume: {props.appState.volume}%
+            Set Volume ({props.appState.volume}%)
         </label>
 
         <input 
@@ -331,10 +330,11 @@ const ControlsContainer = (props) => {
         />
           
       </div>
+
+      <br/>
  
-      <div id="display" className="row well">
-        <p>Last Command: <br/> {props.appState.displayMessage}</p> 
-         
+      <div id="display" className="row w-100">
+        <p>Last Command: <br/>{props.appState.displayMessage}</p>  
       </div>  
   
     </div>
