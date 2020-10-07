@@ -1,7 +1,6 @@
 import React from "react";
 import "./styles.scss";
 
-
 ////////////////////////////////////////////////////////
 /*
 To-do
@@ -9,8 +8,7 @@ To-do
 -   Record pad clicks
 -   Add ability to play back history at a vairable speed
 
-- Fix power button
-- Fix volume slider
+- Fix button layout for narrow displays, buttons should expand to fill available space
 
 - Add other sound banks and make them selectable by dropdown
 - Display to show displayMessages 
@@ -145,7 +143,14 @@ const banks = [
     name: "Bank 2",
     obj: bankTwo
   }
-]
+];
+
+const emptyPadObj = {
+  keyCode: -1,
+  keyTrigger: "_",
+  id: "Blank",
+  url: "#"
+};
 
 ////////////////////////////////////////////////////////
 //React
@@ -158,7 +163,10 @@ class Wrapper extends React.Component {
       currentBank: banks[0],
       powerOn: true,
       displayMessage: "Power On",
-      volume: 90
+      volume: 90,
+      padHistory: [
+        
+      ]        
     };
 
     this.handleKeyPress = this.handleKeyPress.bind(this);
@@ -166,14 +174,19 @@ class Wrapper extends React.Component {
     this.handlePowerChange = this.handlePowerChange.bind(this);
     this.handlePadClick = this.handlePadClick.bind(this);
     this.handleBankSelect = this.handleBankSelect.bind(this);
-    
   }
 
   handlePadClick(padID) {
     console.log("handlePadClick for ID: ", padID);
 
-    this.setState({ 
-      displayMessage: this.state.currentBank.name + ": " + padID
+    const newPadHistoryObj = {
+      bankName: this.state.currentBank.name,
+      padObj: this.state.currentBank.obj.find(el => el.id === padID)
+    }
+
+    this.setState({
+      displayMessage: this.state.currentBank.name + ": " + padID,
+      padHistory: [newPadHistoryObj, ...this.state.padHistory ]
     });
 
     const sound = document.getElementById(padID);
@@ -181,12 +194,26 @@ class Wrapper extends React.Component {
     sound.play();
   }
 
+  
+  handleKeyPress(event) {
+    let sound = this.state.currentBankObj.filter(
+      (e) => e.keyCode === event.keyCode
+    )[0];
+
+    //console.log("Sound:", sound);
+
+    if (sound !== undefined) {
+      //this.handlePadClick(sound.id);
+      //document.getElementById(sound.id).focus();
+      document.getElementById(sound.id).click();
+    }
+  }
+
   handleBankSelect(e) {
     console.log("Bank selected value: ", e.target.value);
-    this.setState({ 
+    this.setState({
       displayMessage: "Selected sound bank: " + e.target.value,
-      currentBank: banks.filter(el => el.name === e.target.value)[0]
-      
+      currentBank: banks.filter((el) => el.name === e.target.value)[0]
     });
   }
 
@@ -195,163 +222,86 @@ class Wrapper extends React.Component {
     if (this.state.powerOn) {
       this.setState({
         volume: e.target.value,
-        displayMessage: 'Volume set to ' + e.target.value + '%'
+        displayMessage: "Volume set to " + e.target.value + "%"
       });
       //setTimeout(() => this.clearDisplay(), 1000);
-    } 
-    else {
-      this.setState({ 
-        displayMessage: 'Power Off'
+    } else {
+      this.setState({
+        displayMessage: "Power Off"
       });
     }
- 
   }
- 
+
   handlePowerChange(e) {
-    console.log(oDATE.toLocaleString(), "handlePowerChange to value: ", e.target.checked);
+    console.log(
+      oDATE.toLocaleString(),
+      "handlePowerChange to value: ",
+      e.target.checked
+    );
     this.setState({
       powerOn: e.target.checked,
-      displayMessage: 'Power ' + (e.target.checked ? 'On' : 'Off')
+      displayMessage: "Power " + (e.target.checked ? "On" : "Off")
     });
-
   }
 
-  handleKeyPress(event) { 
-    let sound = this.state.currentBankObj.filter(e => e.keyCode === event.keyCode)[0];
-    
-    //console.log("Sound:", sound);
-
-    if(sound !== undefined) {
-      //this.handlePadClick(sound.id);
-      //document.getElementById(sound.id).focus();
-      document.getElementById(sound.id).click();
-    }
-
-  }
+  
 
   componentDidMount() {
-    document.addEventListener('keydown', this.handleKeyPress);
+    document.addEventListener("keydown", this.handleKeyPress);
   }
   componentWillUnmount() {
-    document.removeEventListener('keydown', this.handleKeyPress); 
+    document.removeEventListener("keydown", this.handleKeyPress);
   }
 
   render() {
     return (
-      <div id="drum-machine" >
+      <div id="drum-machine">
+        
         <div id="main-container" className="container-fluid">
-          <div className="row"> 
-              <DrumPadButtonsContainer 
-                //bank={this.state.currentBank} 
-                handlePadClick={this.handlePadClick}
-                //powerOn={this.state.powerOn}
-                appState={this.state}
-              />  
-              <ControlsContainer 
-                //displayMessage={this.state.displayMessage} 
-                //volume={this.state.volume}
-                adjustVolume={this.adjustVolume}
-                handlePowerChange={this.handlePowerChange}
-                handleBankSelect={this.handleBankSelect}
-                //powerOn={this.state.powerOn}
-                appState={this.state}
-              /> 
+          
+        <div className="row mx-2 mt-3">
+          <h1>Drum Machine</h1> 
+        </div>
+
+          <div className="row">
+            <DrumPadButtonsContainer
+              //bank={this.state.currentBank}
+              handlePadClick={this.handlePadClick}
+              //powerOn={this.state.powerOn}
+              appState={this.state}
+            />
+            <ControlsContainer
+              //displayMessage={this.state.displayMessage}
+              //volume={this.state.volume}
+              adjustVolume={this.adjustVolume}
+              handlePowerChange={this.handlePowerChange}
+              handleBankSelect={this.handleBankSelect}
+              //powerOn={this.state.powerOn}
+              appState={this.state}
+            />
+            <DrumPadHistoryContainer 
+              appState={this.state}
+            />
           </div>
         </div>
 
-        <div id="history-container">
-
-        </div>
-
+        <div id="history-container"></div>
       </div>
     );
   }
 }
 
-const ControlsContainer = (props) => {
-  return (
-    <div id="controls-container" className="col mr-3 my-3">
-       
-        <h2>Controls</h2>
-        <hr/> 
-
-      <div className=""> 
-        <div className="col custom-control custom-switch">
-          <input 
-            id="power-switch"
-            type="checkbox" 
-            className="custom-control-input"
-            onChange={props.handlePowerChange} 
-            value={props.appState.powerOn}
-            checked={props.appState.powerOn}
-          />
-          <label 
-            className="custom-control-label" 
-            htmlFor="power-switch"
-          >
-              {props.appState.powerOn ? "Power On" : "Power Off"}
-          </label>
-        </div> 
- 
-      </div>
-
-      <br/>
-
-      <div className="">
-          <label className="mr-sm-2" for="inlineFormCustomSelect">Select Sound Bank</label>
-          
-          <select 
-            className="custom-select"
-            onChange={props.handleBankSelect}
-          >  
-            {banks.map(e => <option value={e.name}>{e.name}</option>)}
-          </select>
-
-        </div>
-
-        <br/>
-
-      <div className="">
-
-        <label htmlFor="range-volume">
-            Set Volume ({props.appState.volume}%)
-        </label>
-
-        <input 
-          id="range-volume" 
-          className={"custom-range form-controlx" + (props.appState.powerOn ? "" : " disabled")} 
-          type="range"
-          min="0" 
-          max="100"
-          step="1"  
-          value={props.appState.volume}
-          onChange={props.adjustVolume}
-          disabled={!props.appState.powerOn}
-        />
-          
-      </div>
-
-      <br/>
- 
-      <div id="display" className="row w-100">
-        <p>Last Command: <br/>{props.appState.displayMessage}</p>  
-      </div>  
-  
-    </div>
-  );
-};
-
 const DrumPadButtonsContainer = (props) => {
   return (
-    <div className="col m-3"> 
+    <div className="col m-2">
       <div id="drum-buttons-container" className="row">
         {props.appState.currentBank.obj.map((e, i) => (
-          <DrumPadButton 
-            padID={e.id} 
-            key={i} 
-            audioLink={e.url} 
-            text={e.keyTrigger} 
-            handlePadClick={props.handlePadClick.bind(null, e.id)}  
+          <DrumPadButton
+            padID={e.id}
+            key={i}
+            audioLink={e.url}
+            text={e.keyTrigger}
+            handlePadClick={props.handlePadClick.bind(null, e.id)}
             appState={props.appState}
           />
         ))}
@@ -363,24 +313,133 @@ const DrumPadButtonsContainer = (props) => {
 const DrumPadButton = (props) => {
   return (
     <div className="drum-pad col-sm-4 p-1">
-      <button 
-        sound-id={props.padID} 
-        type="button " 
-        className={"btn btn-primary btn-block" + (props.appState.powerOn ? "" : " disabled")}
+      <button
+        sound-id={props.padID}
+        type="button "
+        className={
+          "btn btn-primary btn-block" +
+          (props.appState.powerOn ? "" : " disabled")
+        }
         onClick={props.handlePadClick}
         disabled={!props.appState.powerOn}
       >
-        <audio 
-          id={props.padID} 
-          src={props.audioLink} 
-          className="clip" 
-          type="audio/mpeg" 
+        <audio
+          id={props.padID}
+          src={props.audioLink}
+          className="clip"
+          type="audio/mpeg"
         />
         {props.text}
       </button>
     </div>
   );
 };
+
+const ControlsContainer = (props) => {
+  return (
+    <div id="controls-container" className="col mx-2 my-2">
+      <h2>Controls</h2>
+      <hr />
+
+      <div className="">
+        <div className="col custom-control custom-switch">
+          <input
+            id="power-switch"
+            type="checkbox"
+            className="custom-control-input"
+            onChange={props.handlePowerChange}
+            value={props.appState.powerOn}
+            checked={props.appState.powerOn}
+          />
+          <label className="custom-control-label" htmlFor="power-switch">
+            {props.appState.powerOn ? "Power On" : "Power Off"}
+          </label>
+        </div>
+      </div>
+
+      <br />
+
+      <div className="">
+        <label className="mr-sm-2" htmlFor="inlineFormCustomSelect">
+          Select Sound Bank
+        </label>
+
+        <select className="custom-select" onChange={props.handleBankSelect}>
+          {banks.map((e, i) => (
+            <option key={i} value={e.name}>{e.name}</option>
+          ))}
+        </select>
+      </div>
+
+      <br />
+
+      <div className="">
+        <label htmlFor="range-volume">
+          Set Volume ({props.appState.volume}%)
+        </label>
+
+        <input
+          id="range-volume"
+          className={
+            "custom-range form-controlx" +
+            (props.appState.powerOn ? "" : " disabled")
+          }
+          type="range"
+          min="0"
+          max="100"
+          step="1"
+          value={props.appState.volume}
+          onChange={props.adjustVolume}
+          disabled={!props.appState.powerOn}
+        />
+      </div>
+
+      <br />
+
+      <div id="display" className="row w-100">
+        <p>
+          <strong>Last Command</strong> <br />
+          {props.appState.displayMessage}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+const DrumPadHistoryContainer = (props) => {
+  console.log("PadHistory:", props.appState.padHistory);
+  return (
+    <div  className="col m-2">
+      
+        <h2>History</h2>
+        <hr />
+
+        <div id="drum-history-container">
+          <ul>
+            {props.appState.padHistory.map(({ bankName, padObj }, i) => 
+              
+              <li key={i}>
+                <span><i className="fa fa-music"></i></span> {bankName + " " + padObj.id} 
+              </li>
+              
+            )}
+          </ul>
+        </div>
+      
+    </div>
+  );
+};
+
+/*<DrumPadButton
+            padID={padObj.id}
+            key={i}
+            audioLink={e.url}
+            text={e.keyTrigger}
+            handlePadClick={props.handlePadClick.bind(null, e.id)}
+            appState={props.appState}
+          />*/
+
+
 
 export default function App() {
   return <Wrapper />;
