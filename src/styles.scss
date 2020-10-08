@@ -32,7 +32,7 @@ ul,
 li,
 #drum-history-container
  {
-  border-width: 0.5px;
+  border-width: 0px;
   border-style: dotted;
   border-color: red;
 }
@@ -165,8 +165,8 @@ li,
         padding: 10px;
         margin: 0px 0px;
         //height: 100%;
-        bottom: 0;
-        margin-bottom: -0px;
+        //bottom: 0;
+        //margin-bottom: 0px;
  
       }
     }
@@ -186,12 +186,48 @@ li,
       width: 100%;
 
       border-color: blue;
+      //margin-bottom: 20px;
 
       ul {
         padding: 0px;
-        list-style-type: none; 
+        list-style-type: none;
+         
+        
+
         li {
-          margin: 5px 0px;
+          //margin: 10px 0px;
+          
+          padding: 10px 0px;
+          margin-right: 10px;
+          border-bottom: 1px solid grey;
+
+          display: flex;
+          //border-width: 1px; 
+          align-items: center;
+
+          span {
+            width: 2em;
+            align-content: center;
+            text-align: center;
+            vertical-align: center;
+            font-size: 1.5em;
+            border-width: 1px;
+            border-color: blue;
+            height: 100%; 
+
+            i {
+              border-width: 1px;
+            border-color: blue; 
+            }
+          }
+
+          p {
+            margin: 0;
+
+            strong {
+              font-weight: 600;
+            }
+          }
         }
       }
 
@@ -224,6 +260,7 @@ li,
       //positioning
       position: absolute;
       top: 40px;
+      margin-bottom: 40px;
       left: 50%;
       transform: translate(-50%, 0%);
     }

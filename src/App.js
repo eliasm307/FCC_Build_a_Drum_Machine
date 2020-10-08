@@ -196,7 +196,7 @@ class Wrapper extends React.Component {
 
   
   handleKeyPress(event) {
-    let sound = this.state.currentBankObj.filter(
+    let sound = this.state.currentBank.obj.filter(
       (e) => e.keyCode === event.keyCode
     )[0];
 
@@ -396,7 +396,7 @@ const ControlsContainer = (props) => {
 
       <br />
 
-      <div id="display" className="row flex-grow-1">
+      <div id="display" className="row flex-grow-1 mb-1">
         <p>
           <strong>Last Command</strong> <br />
           {props.appState.displayMessage}
@@ -414,12 +414,17 @@ const DrumPadHistoryContainer = (props) => {
         <h2>History</h2>
         <hr />  
         
-        <div id="drum-history-container" className="">
-          <ul>
+        <div id="drum-history-container" >
+          <ul className="">
             {props.appState.padHistory.map(({ bankName, padObj }, i) => 
               
-              <li key={i}>
-                <span><i className="fa fa-music"></i></span> {bankName + " " + padObj.id} 
+              <li key={i} className="">
+                <span><i className="fa fa-music"></i></span> 
+                <p>
+                    <strong>Bank:</strong> {bankName} <br/>
+                    <strong>Sound:</strong> {padObj.id} <br/>
+                    <strong>Key:</strong> {padObj.keyTrigger}
+                </p>
               </li>
               
             )}
