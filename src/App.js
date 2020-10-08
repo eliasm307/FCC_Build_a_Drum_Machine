@@ -259,7 +259,7 @@ class Wrapper extends React.Component {
         
         <div id="main-container" className="container-fluid">
           
-        <div className="row mx-2 mt-3">
+        <div className="row px-2 pt-1">
           <h1>Drum Machine</h1> 
         </div>
 
@@ -312,7 +312,7 @@ const DrumPadButtonsContainer = (props) => {
 
 const DrumPadButton = (props) => {
   return (
-    <div className="drum-pad col-sm-4 p-1">
+    <div className="drum-pad col-4 p-1">
       <button
         sound-id={props.padID}
         type="button "
@@ -337,7 +337,7 @@ const DrumPadButton = (props) => {
 
 const ControlsContainer = (props) => {
   return (
-    <div id="controls-container" className="col mx-2 my-2">
+    <div id="controls-container" className="col-md mx-2 my-2">
       <h2>Controls</h2>
       <hr />
 
@@ -396,7 +396,7 @@ const ControlsContainer = (props) => {
 
       <br />
 
-      <div id="display" className="row w-100">
+      <div id="display" className="row flex-grow-1">
         <p>
           <strong>Last Command</strong> <br />
           {props.appState.displayMessage}
@@ -409,12 +409,12 @@ const ControlsContainer = (props) => {
 const DrumPadHistoryContainer = (props) => {
   console.log("PadHistory:", props.appState.padHistory);
   return (
-    <div  className="col m-2">
-      
+    <div className="col m-2 ">
+       
         <h2>History</h2>
-        <hr />
-
-        <div id="drum-history-container">
+        <hr />  
+        
+        <div id="drum-history-container" className="">
           <ul>
             {props.appState.padHistory.map(({ bankName, padObj }, i) => 
               

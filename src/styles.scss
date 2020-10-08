@@ -32,7 +32,7 @@ ul,
 li,
 #drum-history-container
  {
-  border-width: 0px;
+  border-width: 0.5px;
   border-style: dotted;
   border-color: red;
 }
@@ -45,10 +45,15 @@ li,
   height: 100vh;
   //padding: 100px;
  
+  h1 {
+    margin: 0px;
+  }
 
   h2 {
     font-size: 1.25em;
   }
+
+  
 
   #main-container {
      
@@ -59,6 +64,8 @@ li,
     //positioning
     position: absolute;
     top: 50%;
+    //bottom: 5%;
+    
     left: 50%;
     transform: translate(-50%, -50%);
 
@@ -89,11 +96,11 @@ li,
       .drum-pad {
         margin: 0px;
         //padding: 5px; 
-        max-width: 15vw;
+        //max-width: 15vw;
 
         button {
           height: 100%;
-          margin: 0px;
+          //margin: 0px;
         }
 
         button:before {
@@ -111,7 +118,7 @@ li,
           /* basic styles */
           min-width:100px;  
           padding:10px;
-          border-radius:5px;
+          border-radius:3px;
           background:rgba(0,0,0,0.5);
           color: white;
           text-align:center;
@@ -132,17 +139,21 @@ li,
     }
 
     #controls-container {  
-      padding: 0px 0px;
+      //padding: 0px 0px;
       height: 100%;
       -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
       -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-      box-sizing: border-box; 
+      box-sizing: border-box;
+      bottom: 0;
+      
+      
  
       #range-volume {
         //display: inline;
       }
  
       #display { 
+        display: relative;
         width: 100%; 
         display: block;
         color: black;
@@ -153,17 +164,28 @@ li,
         border-radius: 3px;
         padding: 10px;
         margin: 0px 0px;
-        height: 100%;
-        margin-bottom: 5px;
+        //height: 100%;
+        bottom: 0;
+        margin-bottom: -0px;
  
       }
     }
 
+     
+
     #drum-history-container {
       overflow-y: auto;
-      box-sizing: border-box;
+      //box-sizing: border-box;
       max-height: 60vh;
+      //bottom: 0;
+      -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+      -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+      box-sizing: border-box;
+
+      height: inherit;
       width: 100%;
+
+      border-color: blue;
 
       ul {
         padding: 0px;
@@ -174,11 +196,39 @@ li,
       }
 
 
+
     }
 
-    
+     
+
  
   }
+  @media (max-width: 800px) { 
  
+    //background-color: black;
+  
+    #drum-history-container {
+      //background-color: black;
+      //min-height: 100px;
+      max-height: unset;
+      height: auto;
+    }
+  
+    #main-container {
+       
+      //background-color: black;
+      //sizing
+      //max-width: 90%;
+      min-height: 100px;
+   
+      //positioning
+      position: absolute;
+      top: 40px;
+      left: 50%;
+      transform: translate(-50%, 0%);
+    }
+  
+   }
  
 }
+
